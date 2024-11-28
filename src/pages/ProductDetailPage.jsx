@@ -3,6 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -10,15 +18,20 @@ const ProductDetailPage = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const response = await axios.get(`http://localhost:5000/products/${id}`);
-      setProduct(response.data);
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/products/${id}`
+        );
+        setProduct(response.data);
+      } catch (error) {
+        console.error("Error fetching product", error);
+      }
     };
 
     fetchProduct();
   }, [id]);
 
   const handleFavorite = async () => {
-    // Update product's favorite status
     try {
       const response = await axios.post(
         `http://localhost:5000/products/favorite/${id}`
@@ -33,20 +46,49 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <div>
+    <Box sx={{ padding: 3 }}>
       {product ? (
-        <>
-          <img src={product.mainImage} alt={product.name} />
-          <h3>{product.name}</h3>
-          <p>{product.description}</p>
-          <button onClick={handleFavorite}>
-            {product.favorite ? "Remove from Favorites" : "Add to Favorites"}
-          </button>
-        </>
+        <Card
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={product.mainImage}
+            alt={product.name}
+            style={{
+              width: "100%",
+              height: "auto",
+              objectFit: "cover",
+              maxHeight: 400,
+            }}
+          />
+          <CardContent>
+            <Typography variant="h4" gutterBottom>
+              {product.name}
+            </Typography>
+            <Typography variant="body1" color="textSecondary" paragraph>
+              {product.description}
+            </Typography>
+
+            <Button
+              variant="contained"
+              color={product.favorite ? "error" : "primary"}
+              onClick={handleFavorite}
+              fullWidth
+            >
+              {product.favorite ? "Remove from Favorites" : "Add to Favorites"}
+            </Button>
+          </CardContent>
+        </Card>
       ) : (
-        <p>Loading...</p>
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
+          <CircularProgress />
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

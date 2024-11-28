@@ -1,11 +1,21 @@
 // src/pages/EditProductPage.js
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  InputLabel,
+  Input,
+  FormControl,
+} from "@mui/material";
 
 const EditProductPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
@@ -14,13 +24,19 @@ const EditProductPage = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const response = await axios.get(`http://localhost:5000/products/${id}`);
-      const { name, description, quantity, images } = response.data;
-      setProduct(response.data);
-      setProductName(name);
-      setDescription(description);
-      setQuantity(quantity);
-      setImages(images);
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/products/${id}`
+        );
+        const { name, description, quantity, images } = response.data;
+        setProduct(response.data);
+        setProductName(name);
+        setDescription(description);
+        setQuantity(quantity);
+        setImages(images);
+      } catch (error) {
+        console.error("Error fetching product", error);
+      }
     };
 
     fetchProduct();
@@ -49,36 +65,84 @@ const EditProductPage = () => {
         },
       });
       alert("Product updated successfully!");
+      navigate(`/product/${id}`);
     } catch (error) {
       console.error("Error updating product", error);
     }
   };
 
   return (
-    <div>
+    <Box
+      sx={{
+        maxWidth: 600,
+        mx: "auto",
+        mt: 5,
+        p: 3,
+        boxShadow: 3,
+        borderRadius: 2,
+        backgroundColor: "white",
+      }}
+    >
+      <Typography variant="h4" gutterBottom align="center">
+        Edit Product
+      </Typography>
       {product ? (
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
+          <TextField
+            label="Product Name"
+            fullWidth
+            margin="normal"
+            variant="outlined"
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
+            required
           />
-          <textarea
+          <TextField
+            label="Description"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            multiline
+            rows={4}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            required
           />
-          <input
+          <TextField
+            label="Quantity"
             type="number"
+            fullWidth
+            margin="normal"
+            variant="outlined"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
+            required
           />
-          <input type="file" multiple onChange={handleImageChange} />
-          <button type="submit">Update Product</button>
+          <FormControl fullWidth margin="normal">
+            <InputLabel htmlFor="upload-images">Upload New Images</InputLabel>
+            <Input
+              id="upload-images"
+              type="file"
+              inputProps={{ multiple: true }}
+              onChange={handleImageChange}
+            />
+          </FormControl>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 3 }}
+          >
+            Update Product
+          </Button>
         </form>
       ) : (
-        <p>Loading...</p>
+        <Typography variant="body1" align="center">
+          Loading product details...
+        </Typography>
       )}
-    </div>
+    </Box>
   );
 };
 

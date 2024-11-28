@@ -1,15 +1,15 @@
 // src/pages/ProductListPage.js
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../slices/productsSlice';
-import './ProductListPage.css'; // optional, for custom styles
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../redux/slices/productsSlice";
+import "./ProductListPage.css";
 
 const ProductListPage = () => {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
 
   useEffect(() => {
-    dispatch(fetchProducts()); // Fetch products when the page loads
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   if (loading) {
@@ -27,10 +27,12 @@ const ProductListPage = () => {
         {products.map((product) => (
           <div key={product._id} className="product-card">
             <div className="product-image">
-              {/* Show the thumbnail image if exists */}
               {product.images.length > 0 && (
                 <img
-                  src={product.images.find((img) => img.isThumbnail)?.url || product.images[0].url}
+                  src={
+                    product.images.find((img) => img.isThumbnail)?.url ||
+                    product.images[0].url
+                  }
                   alt={product.name}
                   className="thumbnail-img"
                 />

@@ -3,6 +3,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Paper,
+} from "@mui/material";
 
 const FavoriteProductsPage = () => {
   const [favorites, setFavorites] = useState([]);
@@ -23,28 +32,65 @@ const FavoriteProductsPage = () => {
   };
 
   return (
-    <div>
-      <h1>Your Favorite Products</h1>
-      {favorites.length > 0 ? (
-        <div>
-          {favorites.map((id) => (
-            <div key={id}>
-              {/* Link to the Product Detail Page */}
-              <Link to={`/product/${id}`}>
-                <button>View Product {id}</button>
-              </Link>
+    <Box
+      sx={{
+        maxWidth: 900,
+        mx: "auto",
+        mt: 5,
+        p: 3,
+        boxShadow: 3,
+        borderRadius: 2,
+        backgroundColor: "white",
+      }}
+    >
+      <Typography variant="h4" gutterBottom align="center">
+        Your Favorite Products
+      </Typography>
 
-              {/* Remove from favorites button */}
-              <button onClick={() => removeFromFavorites(id)}>
-                Remove from Favorites
-              </button>
-            </div>
+      {favorites.length > 0 ? (
+        <Grid container spacing={3}>
+          {favorites.map((id) => (
+            <Grid item xs={12} sm={6} md={4} key={id}>
+              <Paper sx={{ padding: 2, boxShadow: 2 }}>
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Product {id}
+                    </Typography>
+                    <Box
+                      sx={{ display: "flex", justifyContent: "space-between" }}
+                    >
+                      {/* Link to the Product Detail Page */}
+                      <Link
+                        to={`/product/${id}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Button variant="contained" color="primary">
+                          View Product
+                        </Button>
+                      </Link>
+
+                      {/* Remove from favorites button */}
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => removeFromFavorites(id)}
+                      >
+                        Remove
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Paper>
+            </Grid>
           ))}
-        </div>
+        </Grid>
       ) : (
-        <p>You have no favorite products yet.</p>
+        <Typography variant="body1" align="center" sx={{ mt: 2 }}>
+          You have no favorite products yet.
+        </Typography>
       )}
-    </div>
+    </Box>
   );
 };
 

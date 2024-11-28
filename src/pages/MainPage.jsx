@@ -1,9 +1,14 @@
-// src/pages/MainPage.js
-
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../redux/productsSlice";
-import { Link } from "react-router-dom";
+import { fetchProducts } from "../redux/slices/productsSlice";
+import {
+  TextField,
+  CircularProgress,
+  Box,
+  Container,
+  Typography,
+} from "@mui/material";
+import TableComponent from "../components/TableComponent";
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -26,52 +31,43 @@ const MainPage = () => {
   );
 
   return (
-    <div className="main-page">
-      <header className="main-page-header">
-        <h1>Vendor Portal</h1>
-        <input
-          type="text"
-          placeholder="Search for products"
-          onChange={handleSearch}
-          value={searchQuery}
-          className="search-bar"
-        />
-      </header>
+    <Container>
+      {/* Header Section */}
+      {/* <Box
+        sx={{
+          padding: 4,
+          backgroundColor: "#f4f4f4",
+          marginBottom: 4,
+          borderRadius: 2,
+        }}
+      > */}
+      <Typography variant="h4" align="center" gutterBottom>
+        Vendor Portal
+      </Typography>
+      <TextField
+        variant="outlined"
+        fullWidth
+        placeholder="Search for products"
+        onChange={handleSearch}
+        value={searchQuery}
+        sx={{ marginTop: 2 }}
+      />
+      {/* <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}>
+          <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+            Add Product
+          </Button>
+        </Box> */}
+      {/* </Box> */}
 
+      {/* Loading or Product Table */}
       {loading ? (
-        <p>Loading...</p>
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
+          <CircularProgress />
+        </Box>
       ) : (
-        <div className="product-list">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
-              <div key={product._id} className="product-card">
-                <Link to={`/product/${product._id}`} className="product-link">
-                  <div className="product-image">
-                    {product.images.length > 0 && (
-                      <img
-                        src={
-                          product.images.find((img) => img.isThumbnail)
-                            ? product.images.find((img) => img.isThumbnail).url
-                            : product.images[0].url
-                        }
-                        alt={product.name}
-                        className="product-img"
-                      />
-                    )}
-                  </div>
-                  <div className="product-info">
-                    <h3>{product.name}</h3>
-                    <p>{product.description}</p>
-                  </div>
-                </Link>
-              </div>
-            ))
-          ) : (
-            <p>No products found</p>
-          )}
-        </div>
+        <TableComponent filteredProducts={filteredProducts} />
       )}
-    </div>
+    </Container>
   );
 };
 

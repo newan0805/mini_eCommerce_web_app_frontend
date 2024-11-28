@@ -1,29 +1,44 @@
-// src/components/SearchBar.js
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { TextField, Button, Box } from "@mui/material";
 
 const SearchBar = () => {
   const [query, setQuery] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // Handle search submission
   const handleSearch = (e) => {
     e.preventDefault();
     if (query.trim()) {
-      history.push(`/search?query=${query}`);
+      navigate(`/search?query=${query}`);
     }
   };
 
   return (
-    <form onSubmit={handleSearch}>
-      <input
-        type="text"
-        placeholder="Search products..."
+    <Box
+      component="form"
+      onSubmit={handleSearch}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 2,
+        width: "100%",
+        maxWidth: 600,
+        margin: "auto",
+      }}
+    >
+      <TextField
+        label="Search products"
+        variant="outlined"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        fullWidth
       />
-      <button type="submit">Search</button>
-    </form>
+      <Button type="submit" variant="contained" color="primary">
+        Search
+      </Button>
+    </Box>
   );
 };
 
