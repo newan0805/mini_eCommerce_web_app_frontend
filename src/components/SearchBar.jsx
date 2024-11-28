@@ -10,7 +10,7 @@ const SearchBar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (query.trim()) {
-      history.push(`/search?query=${query}`); // Redirect to the search results page with query as a URL parameter
+      history.push(`/search?query=${query}`);
     }
   };
 
