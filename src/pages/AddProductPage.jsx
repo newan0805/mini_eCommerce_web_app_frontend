@@ -121,9 +121,9 @@ const AddProductPage = () => {
           >
             Products
           </Typography>
-          <Typography sx={{ color: "#001EB9", fontSize: "20px" }}>
+          {/* <Typography sx={{ color: "#001EB9", fontSize: "20px" }}>
             {">"} Add
-          </Typography>
+          </Typography> */}
         </Box>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
