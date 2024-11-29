@@ -46,7 +46,7 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <Box sx={{ padding: 3, backgroundColor: '#fff' }}>
+    <Box sx={{ padding: 3, backgroundColor: "#fff" }}>
       {product ? (
         <Card
           sx={{
