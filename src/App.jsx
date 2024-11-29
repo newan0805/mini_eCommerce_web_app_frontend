@@ -8,6 +8,7 @@ import FavoriteProductsPage from "./pages/FavoriteProductsPage";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   return (
@@ -17,11 +18,12 @@ function App() {
         <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/search/:query" element={<SearchResultsPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route
           path="/add-product"
           element={
             // <ProtectedRoute>
-              <AddProductPage />
+            <AddProductPage />
             // </ProtectedRoute>
           }
         />
