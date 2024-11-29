@@ -72,3 +72,23 @@
 .MuiTableCell-root {
   border-bottom: none;
 }
+
+.Text-Field {
+  color: #555;
+}
+
+.upload-label {
+  display: inline-block;
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+.upload-label:hover {
+  color: #0056b3;
+}
+
+.fields {
+  background-color: #f7f7f7;
+}

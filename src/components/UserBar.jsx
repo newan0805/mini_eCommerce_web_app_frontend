@@ -56,7 +56,6 @@ const UserBar = () => {
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Menu>
         </div>
-        <Avatar sx={{ bgcolor: "#1890ff", marginLeft: 1 }} />
       </Toolbar>
     </AppBar>
   );

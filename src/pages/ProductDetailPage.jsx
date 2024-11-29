@@ -46,7 +46,7 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box sx={{ padding: 3, backgroundColor: '#fff' }}>
       {product ? (
         <Card
           sx={{
@@ -56,10 +56,16 @@ const ProductDetailPage = () => {
           }}
         >
           <img
-            src={product.mainImage}
+            src={
+              product.images?.find((img) => img.isThumbnail)?.path
+                ? `http://localhost:5000${
+                    product.images.find((img) => img.isThumbnail).path
+                  }`
+                : `http://localhost:5000${product.images?.[0]?.path || ""}`
+            }
             alt={product.name}
             style={{
-              width: "100%",
+              width: "60%",
               height: "auto",
               objectFit: "cover",
               maxHeight: 400,

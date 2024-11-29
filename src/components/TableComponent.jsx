@@ -14,43 +14,48 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Star } from "@mui/icons-material";
 const TableComponent = ({ filteredProducts }) => {
+  console.log(filteredProducts);
   return (
     <TableContainer sx={{ bgcolor: "#fff" }}>
-      {" "}
       <Table>
-        {" "}
         <TableHead>
-          {" "}
           <TableRow>
-            {" "}
-            <TableCell>SKU</TableCell> <TableCell>IMAGE</TableCell>{" "}
-            <TableCell>PRODUCT NAME</TableCell> <TableCell>PRICE</TableCell>{" "}
-            <TableCell align="center">ACTIONS</TableCell>{" "}
-          </TableRow>{" "}
-        </TableHead>{" "}
+            <TableCell sx={{ fontWeight: "bold", color: "#001EB9" }}>
+              SKU
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#001EB9" }}>
+              IMAGE
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#001EB9" }}>
+              PRODUCT NAME
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#001EB9" }}>
+              PRICE
+            </TableCell>
+            <TableCell align="center"></TableCell>
+          </TableRow>
+        </TableHead>
+
         <TableBody>
-          {" "}
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
               <TableRow key={product._id}>
-                {" "}
-                <TableCell>
-                  {" "}
+                <TableCell sx={{ color: "#969191" }}>
                   <Link
                     to={`/products/${product._id}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    {" "}
-                    {product.sku}{" "}
-                  </Link>{" "}
-                </TableCell>{" "}
+                    #{product.sku}
+                  </Link>
+                </TableCell>
                 <TableCell>
-                  {" "}
                   <img
                     src={
-                      product.images.find((img) => img.isThumbnail)
-                        ? product.images.find((img) => img.isThumbnail).url
-                        : product.images[0].url
+                      product.images?.find((img) => img.isThumbnail)?.path
+                        ? `http://localhost:5000${
+                            product.images.find((img) => img.isThumbnail).path
+                          }`
+                        : `http://localhost:5000${product.images?.[0]?.path || ""}`
                     }
                     alt={product.name}
                     style={{
@@ -59,38 +64,32 @@ const TableComponent = ({ filteredProducts }) => {
                       objectFit: "cover",
                       borderRadius: 8,
                     }}
-                  />{" "}
-                </TableCell>{" "}
-                <TableCell>{product.name}</TableCell>{" "}
-                <TableCell>${product.price}</TableCell>{" "}
+                  />
+                </TableCell>
+                <TableCell>{product.name}</TableCell>
+                <TableCell>${product.price}</TableCell>
                 <TableCell align="center">
-                  {" "}
                   <IconButton color="primary">
-                    {" "}
-                    <DeleteIcon />{" "}
-                  </IconButton>{" "}
+                    <DeleteIcon />
+                  </IconButton>
                   <IconButton color="primary">
-                    {" "}
-                    <EditIcon />{" "}
-                  </IconButton>{" "}
+                    <EditIcon />
+                  </IconButton>
                   <IconButton color="primary">
-                    {" "}
-                    <Star />{" "}
-                  </IconButton>{" "}
-                </TableCell>{" "}
+                    <Star />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              {" "}
               <TableCell colSpan={5} align="center">
-                {" "}
-                No products found{" "}
-              </TableCell>{" "}
+                No products found
+              </TableCell>
             </TableRow>
-          )}{" "}
-        </TableBody>{" "}
-      </Table>{" "}
+          )}
+        </TableBody>
+      </Table>
     </TableContainer>
   );
 };

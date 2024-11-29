@@ -8,11 +8,12 @@ import {
   Typography,
   Button,
   Grid,
-  Link,
 } from "@mui/material";
 import TableComponent from "../components/TableComponent";
 import SearchBar from "../components/SearchBar";
 import { Add, Star, TableRows } from "@mui/icons-material";
+import UserBar from "../components/UserBar";
+import { Link } from "react-router-dom";
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -58,9 +59,10 @@ const MainPage = () => {
           // height: 10,
           // maxWidth: 800,
           // margin: "auto",
-          // mt: 2,
+          mt: 2,
         }}
       >
+        <UserBar />
         <Typography
           variant="h5"
           sx={{ fontWeight: "bold" }}
@@ -88,7 +90,7 @@ const MainPage = () => {
                 sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}
               >
                 <Link
-                  to={"/products/add-product"}
+                  to={"/add-product"}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <Button variant="contained" color="primary">
