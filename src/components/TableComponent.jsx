@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   IconButton,
   Table,
@@ -15,6 +15,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Star } from "@mui/icons-material";
 
 const TableComponent = ({ filteredProducts, onDelete }) => {
+  const navigate = useNavigate();
+
+  const handleEditClick = (product) => {
+    navigate(`/edit-product/${product._id}`);
+  };
   return (
     <TableContainer sx={{ bgcolor: "#fff" }}>
       <Table>
@@ -74,10 +79,13 @@ const TableComponent = ({ filteredProducts, onDelete }) => {
                   <IconButton color="error" onClick={() => onDelete(product)}>
                     <DeleteIcon />
                   </IconButton>
-                  <IconButton color="primary">
+                  <IconButton
+                    color="primary"
+                    onClick={() => handleEditClick(product)}
+                  >
                     <EditIcon />
                   </IconButton>
-                  <IconButton color="primary">
+                  <IconButton color="primary" onClick={() => {}}>
                     <Star />
                   </IconButton>
                 </TableCell>

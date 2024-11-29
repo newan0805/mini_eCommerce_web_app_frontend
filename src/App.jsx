@@ -30,9 +30,9 @@ function App() {
         <Route
           path="/edit-product/:id"
           element={
-            <ProtectedRoute>
-              <EditProductPage />
-            </ProtectedRoute>
+            // <ProtectedRoute>
+            <EditProductPage />
+            // </ProtectedRoute>
           }
         />
         <Route
