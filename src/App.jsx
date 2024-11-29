@@ -22,17 +22,17 @@ function App() {
         <Route
           path="/add-product"
           element={
-            // <ProtectedRoute>
-            <AddProductPage />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <AddProductPage />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/edit-product/:id"
           element={
-            // <ProtectedRoute>
-            <EditProductPage />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <EditProductPage />
+            </ProtectedRoute>
           }
         />
         <Route

@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Container, Typography, Button } from "@mui/material";
 import SearchBar from "../components/SearchBar";
 import { Star } from "@mui/icons-material";
-import UserBar from "../components/UserBar";
 import { Link } from "react-router-dom";
 
 const TopBar = ({ handleSearchChange, handleSearchSubmit, searchQuery }) => {

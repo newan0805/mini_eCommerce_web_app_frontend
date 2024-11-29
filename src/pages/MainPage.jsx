@@ -6,14 +6,9 @@ import {
   Box,
   Container,
   Typography,
-  Button,
-  Grid,
 } from "@mui/material";
 import TableComponent from "../components/TableComponent";
-import SearchBar from "../components/SearchBar";
-import { Star } from "@mui/icons-material";
 import UserBar from "../components/UserBar";
-import { Link } from "react-router-dom";
 import AlertCard from "../components/AlertCard";
 import TopBar from "../components/TopBar";
 
@@ -79,7 +74,7 @@ const MainPage = () => {
       >
         Products
       </Typography>
-      
+
       <TopBar handleSearchChange={handleSearchChange} handleSearchSubmit={handleSearchSubmit} searchQuery={searchQuery} />
 
       {loading ? (

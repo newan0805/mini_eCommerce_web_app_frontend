@@ -28,7 +28,7 @@ const SearchResultsPage = () => {
         );
         setResults(response.data);
       } catch (error) {
-        console.error("Error fetching search results:", error);
+        // console.error("Error fetching search results:", error);
       } finally {
         setLoading(false);
       }

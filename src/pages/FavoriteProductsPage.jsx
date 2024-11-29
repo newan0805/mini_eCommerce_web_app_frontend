@@ -40,7 +40,7 @@ const FavoriteProductsPage = () => {
         );
         setProducts(productData);
       } catch (error) {
-        console.error("Error fetching product details", error);
+        // console.error("Error fetching product details", error);
       }
     };
 

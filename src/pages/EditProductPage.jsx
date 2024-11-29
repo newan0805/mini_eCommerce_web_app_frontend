@@ -38,9 +38,8 @@ const EditProductPage = () => {
       const response = await axios.get(
         `http://localhost:5000/api/products/${id}`
       );
-      console.log(`http://localhost:5000/api/products/${id}`);
+
       const product = response.data;
-      console.log('fetch edit page: ', product)
       setProductSKU(product.sku);
       setProductName(product.name);
       setProductQTY(product.quantity);
@@ -48,7 +47,7 @@ const EditProductPage = () => {
       setDescription(product.description);
       setImages(product.images || []);
     } catch (error) {
-      console.error("Error fetching product", error);
+      // console.error("Error fetching product", error);
     }
   };
 
@@ -79,7 +78,6 @@ const EditProductPage = () => {
 
     try {
       const token = localStorage.getItem("authToken");
-      console.log(token);
 
       const response = await axios.put(
         `http://localhost:5000/api/products/${id}`,
@@ -101,7 +99,7 @@ const EditProductPage = () => {
       });
       setTimeout(() => navigate(`/products/${id}`), 2000);
     } catch (error) {
-      console.error("Error updating product", error);
+      // console.error("Error updating product", error);
       setAlert({
         show: true,
         type: "error",
@@ -220,7 +218,7 @@ const EditProductPage = () => {
                   }}
                 />
               </Box>
-            {/* </Grid>
+              {/* </Grid>
 
             <Grid item xs={12} display={"flex"}> */}
               <Box sx={{ width: "20%" }}>
@@ -229,7 +227,7 @@ const EditProductPage = () => {
                   JPEG, PNG, SVG or GIF (Maximum file size 50MB)
                 </Typography>
               </Box>
-              
+
               <Box>
                 <FormControl fullWidth margin="normal">
                   <Input
@@ -245,7 +243,7 @@ const EditProductPage = () => {
                 </FormControl>
               </Box>
             </Grid>
-            
+
             <Grid item xs={12} sx={{ textAlign: "right" }}>
               <Button
                 type="submit"

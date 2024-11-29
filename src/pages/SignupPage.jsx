@@ -8,42 +8,69 @@ import {
   Container,
   Grid,
 } from "@mui/material";
+import AlertCard from "../components/AlertCard";
 
 const SignupPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [alert, setAlert] = useState({
+    show: false,
+    type: "success",
+    title: "",
+    description: "",
+  });
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setError("");
 
     if (!name || !email || !password) {
-      setError("Please fill in all fields.");
+      setAlert({
+        show: true,
+        type: "error",
+        title: "Signup Failed",
+        description: "Please fill in all fields.",
+      });
       return;
     }
 
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/vendors/register",
-        {
-          name,
-          email,
-          password,
-        }
-      );
+      await axios.post("http://localhost:5000/api/vendors/register", {
+        name,
+        email,
+        password,
+      });
 
-      alert("Signup successful! Please login.");
-    //   window.location.href = "/login";
+      setAlert({
+        show: true,
+        type: "success",
+        title: "Signup Successful",
+        description: "Your account has been created! Please log in.",
+      });
+
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
     } catch (error) {
-      setError("Signup failed. Please try again.");
+      setAlert({
+        show: true,
+        type: "error",
+        title: "Signup Failed",
+        description: "An error occurred while creating your account. Please try again.",
+      });
     }
+  };
+
+  const handleConfirm = () => {
+    setAlert({ ...alert, show: false });
+  };
+
+  const handleCancel = () => {
+    setAlert({ ...alert, show: false });
   };
 
   return (
     <Container
-    //   component="main"
       maxWidth="xs"
       sx={{
         display: "flex",
@@ -56,8 +83,6 @@ const SignupPage = () => {
       <Box
         sx={{
           padding: 4,
-        //   boxShadow: 3,
-        //   borderRadius: 2,
           backgroundColor: "white",
           width: "100%",
         }}
@@ -65,17 +90,6 @@ const SignupPage = () => {
         <Typography variant="h4" gutterBottom align="center">
           Create an Account
         </Typography>
-
-        {error && (
-          <Typography
-            variant="body2"
-            color="error"
-            align="center"
-            sx={{ marginBottom: 2 }}
-          >
-            {error}
-          </Typography>
-        )}
 
         <form onSubmit={handleSignup}>
           <Grid container spacing={2}>
@@ -142,6 +156,17 @@ const SignupPage = () => {
             Login
           </a>
         </Typography>
+
+        {alert.show && (
+          <AlertCard
+            show={alert.show}
+            type={alert.type}
+            title={alert.title}
+            description={alert.description}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+        )}
       </Box>
     </Container>
   );

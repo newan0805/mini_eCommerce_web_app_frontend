@@ -25,7 +25,7 @@ const ProductDetailPage = () => {
         );
         setProduct(response.data);
       } catch (error) {
-        console.error("Error fetching product", error);
+        // console.error("Error fetching product", error);
       } finally {
         setLoading(false);
       }
@@ -44,7 +44,7 @@ const ProductDetailPage = () => {
         favorite: response.data.favorite,
       }));
     } catch (error) {
-      console.error("Error adding to favorites", error);
+      // console.error("Error adding to favorites", error);
     }
   };
 

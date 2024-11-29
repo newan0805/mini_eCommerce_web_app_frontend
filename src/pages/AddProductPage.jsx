@@ -72,7 +72,7 @@ const AddProductPage = () => {
       });
       setTimeout(() => navigate(`/`), 2000);
     } catch (error) {
-      console.error("Error adding product", error);
+      // console.error("Error adding product", error);
       setAlert({
         show: true,
         type: "error",
