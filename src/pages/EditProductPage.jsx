@@ -12,6 +12,7 @@ import {
   Input,
   FormControl,
 } from "@mui/material";
+import AlertCard from "../components/AlertCard";
 
 const EditProductPage = () => {
   const { id } = useParams();
@@ -21,6 +22,12 @@ const EditProductPage = () => {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState("");
   const [images, setImages] = useState([]);
+  const [alert, setAlert] = useState({
+    show: false,
+    type: "success",
+    title: "",
+    description: "",
+  });
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -36,6 +43,12 @@ const EditProductPage = () => {
         setImages(images);
       } catch (error) {
         console.error("Error fetching product", error);
+        setAlert({
+          show: true,
+          type: "error",
+          title: "Failed to Load Product",
+          description: "An error occurred while fetching the product details.",
+        });
       }
     };
 
@@ -64,11 +77,32 @@ const EditProductPage = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      alert("Product updated successfully!");
-      navigate(`/product/${id}`);
+      setAlert({
+        show: true,
+        type: "success",
+        title: "Product Updated Successfully!",
+        description: "The product details have been updated.",
+      });
     } catch (error) {
       console.error("Error updating product", error);
+      setAlert({
+        show: true,
+        type: "error",
+        title: "Update Failed",
+        description: "An error occurred while updating the product.",
+      });
     }
+  };
+
+  const handleConfirm = () => {
+    setAlert({ ...alert, show: false });
+    if (alert.type === "success") {
+      navigate(`/product/${id}`);
+    }
+  };
+
+  const handleCancel = () => {
+    setAlert({ ...alert, show: false });
   };
 
   return (
@@ -141,6 +175,15 @@ const EditProductPage = () => {
         <Typography variant="body1" align="center">
           Loading product details...
         </Typography>
+      )}
+      {alert.show && (
+        <AlertCard
+          type={alert.type}
+          title={alert.title}
+          description={alert.description}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
       )}
     </Box>
   );

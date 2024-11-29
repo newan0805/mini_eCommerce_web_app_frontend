@@ -14,8 +14,8 @@ import {
 } from "@mui/material";
 
 const SearchResultsPage = () => {
-  const { search } = useLocation(); // Get the URL query parameters
-  const query = new URLSearchParams(search).get("query"); // Extract the 'query' parameter from the URL
+  const { search } = useLocation(); 
+  const query = new URLSearchParams(search).get("query");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,7 +26,7 @@ const SearchResultsPage = () => {
         const response = await axios.get(
           `http://localhost:5000/products/search?query=${query}`
         );
-        setResults(response.data); // Set the fetched results
+        setResults(response.data);
       } catch (error) {
         console.error("Error fetching search results:", error);
       } finally {
@@ -35,7 +35,7 @@ const SearchResultsPage = () => {
     };
 
     if (query) {
-      fetchResults(); // Fetch products when query is available
+      fetchResults(); 
     }
   }, [query]);
 
@@ -73,7 +73,6 @@ const SearchResultsPage = () => {
                       >
                         {product.description}
                       </Typography>
-                      {/* Add more product details like price, etc. */}
                       <Button variant="contained" fullWidth>
                         View Details
                       </Button>

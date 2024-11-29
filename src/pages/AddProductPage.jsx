@@ -9,12 +9,20 @@ import {
   Input,
   FormControl,
 } from "@mui/material";
+import AlertCard from "../components/AlertCard";
 
 const AddProductPage = () => {
+  const [productSKU, setProductSKU] = useState("");
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState("");
   const [images, setImages] = useState([]);
+  const [alert, setAlert] = useState({
+    show: false,
+    type: "success",
+    title: "",
+    description: "",
+  });
 
   const handleImageChange = (e) => {
     const files = e.target.files;
@@ -42,11 +50,31 @@ const AddProductPage = () => {
           },
         }
       );
-      alert("Product added successfully!");
+
+      setAlert({
+        show: true,
+        type: "success",
+        title: "Product Added Successfully!",
+        description: "Your product has been added to the inventory.",
+      });
     } catch (error) {
       console.error("Error adding product", error);
-      alert("Failed to add product. Please try again.");
+      setAlert({
+        show: true,
+        type: "error",
+        title: "Failed to Add Product",
+        description:
+          "An error occurred while adding the product. Please try again.",
+      });
     }
+  };
+
+  const handleConfirm = () => {
+    setAlert({ ...alert, show: false });
+  };
+
+  const handleCancel = () => {
+    setAlert({ ...alert, show: false });
   };
 
   return (
@@ -65,6 +93,15 @@ const AddProductPage = () => {
         Add Product
       </Typography>
       <form onSubmit={handleSubmit}>
+      <TextField
+          label="SKU"
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          value={productSKU}
+          onChange={(e) => setProductName(e.target.value)}
+          required
+        />
         <TextField
           label="Product Name"
           fullWidth
@@ -114,6 +151,15 @@ const AddProductPage = () => {
           Add Product
         </Button>
       </form>
+      {alert.show && (
+        <AlertCard
+          type={alert.type}
+          title={alert.title}
+          description={alert.description}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+      )}
     </Box>
   );
 };

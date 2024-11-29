@@ -12,23 +12,57 @@ import {
   Grid,
   Paper,
 } from "@mui/material";
+import AlertCard from "../components/AlertCard";
 
 const FavoriteProductsPage = () => {
   const [favorites, setFavorites] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [alert, setAlert] = useState({
+    show: false,
+    type: "info",
+    title: "",
+    description: "",
+    onConfirm: null,
+  });
 
-  // Load favorites from localStorage when the component mounts
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     setFavorites(storedFavorites);
+
+    const fetchProducts = async () => {
+      try {
+        const productData = await Promise.all(
+          storedFavorites.map((id) =>
+            axios
+              .get(`http://localhost:5000/products/${id}`)
+              .then((res) => res.data)
+          )
+        );
+        setProducts(productData);
+      } catch (error) {
+        console.error("Error fetching product details", error);
+      }
+    };
+
+    if (storedFavorites.length > 0) {
+      fetchProducts();
+    }
   }, []);
 
-  // Function to remove a product from favorites
   const removeFromFavorites = (id) => {
     const updatedFavorites = favorites.filter(
       (favoriteId) => favoriteId !== id
     );
     setFavorites(updatedFavorites);
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites)); // Update localStorage
+    setProducts(products.filter((product) => product.id !== id));
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    setAlert({
+      show: true,
+      type: "info",
+      title: "Product Removed",
+      description: `Product ID ${id} has been removed from your favorites.`,
+      onConfirm: () => setAlert({ ...alert, show: false }),
+    });
   };
 
   return (
@@ -49,32 +83,32 @@ const FavoriteProductsPage = () => {
 
       {favorites.length > 0 ? (
         <Grid container spacing={3}>
-          {favorites.map((id) => (
-            <Grid item xs={12} sm={6} md={4} key={id}>
+          {products.map((product) => (
+            <Grid item xs={12} sm={6} md={4} key={product.id}>
               <Paper sx={{ padding: 2, boxShadow: 2 }}>
                 <Card variant="outlined">
                   <CardContent>
                     <Typography variant="h6" gutterBottom>
-                      Product {id}
+                      {product.name || `Product ${product.id}`}
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 2 }}>
+                      {product.description || "No description available."}
                     </Typography>
                     <Box
                       sx={{ display: "flex", justifyContent: "space-between" }}
                     >
-                      {/* Link to the Product Detail Page */}
                       <Link
-                        to={`/product/${id}`}
+                        to={`/product/${product.id}`}
                         style={{ textDecoration: "none" }}
                       >
                         <Button variant="contained" color="primary">
                           View Product
                         </Button>
                       </Link>
-
-                      {/* Remove from favorites button */}
                       <Button
                         variant="outlined"
                         color="secondary"
-                        onClick={() => removeFromFavorites(id)}
+                        onClick={() => removeFromFavorites(product.id)}
                       >
                         Remove
                       </Button>
@@ -89,6 +123,15 @@ const FavoriteProductsPage = () => {
         <Typography variant="body1" align="center" sx={{ mt: 2 }}>
           You have no favorite products yet.
         </Typography>
+      )}
+
+      {alert.show && (
+        <AlertCard
+          type={alert.type}
+          title={alert.title}
+          description={alert.description}
+          onConfirm={alert.onConfirm}
+        />
       )}
     </Box>
   );

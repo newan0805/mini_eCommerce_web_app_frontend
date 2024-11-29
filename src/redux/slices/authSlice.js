@@ -12,6 +12,7 @@ const authSlice = createSlice({
     setVendor: (state, action) => {
       state.vendor = action.payload.vendor;
       state.token = action.payload.token;
+      console.log("Auth state: ", state);
       localStorage.setItem("auth", JSON.stringify(state));
     },
 

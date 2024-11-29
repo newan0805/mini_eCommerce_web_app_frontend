@@ -65,3 +65,10 @@
   text-decoration: none;
   color: inherit;
 }
+
+.MuiTableRow-root {
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+}
+.MuiTableCell-root {
+  border-bottom: none;
+}
