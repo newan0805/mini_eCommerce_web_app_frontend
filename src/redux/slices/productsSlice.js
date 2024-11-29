@@ -23,17 +23,26 @@ const productsSlice = createSlice({
 
 export const { setProducts, setLoading, setError } = productsSlice.actions;
 
-// Thunk for fetching products
 export const fetchProducts = () => async (dispatch) => {
   dispatch(setLoading(true));
   try {
     const response = await axios.get("http://localhost:5000/api/products");
-    console.log('Get Products: ', response);
+    console.log("Get Products: ", response);
     dispatch(setProducts(response.data));
   } catch (error) {
     dispatch(setError("Error fetching products"));
   } finally {
     dispatch(setLoading(false));
+  }
+};
+
+export const deleteProduct = (productId) => async (dispatch) => {
+  try {
+    await axios.delete(`http://localhost:5000/api/products/${productId}`);
+    dispatch(removeProduct(productId));
+    dispatch(fetchProducts());
+  } catch (error) {
+    dispatch(setError("Error deleting product"));
   }
 };
 

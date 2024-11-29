@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../redux/slices/productsSlice";
+import { fetchProducts, deleteProduct } from "../redux/slices/productsSlice";
 import {
   CircularProgress,
   Box,
@@ -11,16 +11,18 @@ import {
 } from "@mui/material";
 import TableComponent from "../components/TableComponent";
 import SearchBar from "../components/SearchBar";
-import { Add, Star, TableRows } from "@mui/icons-material";
+import { Star } from "@mui/icons-material";
 import UserBar from "../components/UserBar";
 import { Link } from "react-router-dom";
+import AlertCard from "../components/AlertCard";
 
 const MainPage = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.products);
   const loading = useSelector((state) => state.products.loading);
-
   const [searchQuery, setSearchQuery] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -32,6 +34,23 @@ const MainPage = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
+  };
+
+  const handleDelete = (product) => {
+    setSelectedProduct(product);
+    setOpenAlert(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedProduct) {
+      dispatch(deleteProduct(selectedProduct._id));
+      dispatch(fetchProducts());
+    }
+    setOpenAlert(false);
+  };
+
+  const cancelDelete = () => {
+    setOpenAlert(false);
   };
 
   const filteredProducts = products.filter((product) => {
@@ -50,15 +69,10 @@ const MainPage = () => {
     <Container>
       <Container
         sx={{
-          // display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          alignContent: "center",
           flexDirection: "row",
           gap: 2,
-          // height: 10,
-          // maxWidth: 800,
-          // margin: "auto",
           mt: 2,
         }}
       >
@@ -111,7 +125,19 @@ const MainPage = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <TableComponent filteredProducts={filteredProducts} />
+        <TableComponent
+          filteredProducts={filteredProducts}
+          onDelete={handleDelete}
+        />
+      )}
+      {openAlert && (
+        <AlertCard
+          type="error"
+          title="Delete Product"
+          description="Are you sure you want to delete this product? This action cannot be undone."
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
       )}
     </Container>
   );

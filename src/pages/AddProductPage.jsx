@@ -258,6 +258,7 @@ const AddProductPage = () => {
 
         {alert.show && (
           <AlertCard
+            show={alert.show}
             type={alert.type}
             title={alert.title}
             description={alert.description}

@@ -13,8 +13,8 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Star } from "@mui/icons-material";
-const TableComponent = ({ filteredProducts }) => {
-  console.log(filteredProducts);
+
+const TableComponent = ({ filteredProducts, onDelete }) => {
   return (
     <TableContainer sx={{ bgcolor: "#fff" }}>
       <Table>
@@ -55,7 +55,9 @@ const TableComponent = ({ filteredProducts }) => {
                         ? `http://localhost:5000${
                             product.images.find((img) => img.isThumbnail).path
                           }`
-                        : `http://localhost:5000${product.images?.[0]?.path || ""}`
+                        : `http://localhost:5000${
+                            product.images?.[0]?.path || ""
+                          }`
                     }
                     alt={product.name}
                     style={{
@@ -69,7 +71,7 @@ const TableComponent = ({ filteredProducts }) => {
                 <TableCell>{product.name}</TableCell>
                 <TableCell>${product.price}</TableCell>
                 <TableCell align="center">
-                  <IconButton color="primary">
+                  <IconButton color="error" onClick={() => onDelete(product)}>
                     <DeleteIcon />
                   </IconButton>
                   <IconButton color="primary">

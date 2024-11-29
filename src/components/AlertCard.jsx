@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ const AlertCard = ({
   type = "success", // "success", "error", "warning"
   title = "Are you sure?",
   description = "You will not be able to undo this action if you proceed!",
+  show,
   onConfirm,
   onCancel,
 }) => {
@@ -29,6 +30,15 @@ const AlertCard = ({
     }
   };
 
+  useEffect(() => {
+    if (show) {
+    //   document.body.style.backdropFilter = "blur(2.5px)";
+    //   document.body.style.zIndex = 1;
+    } else {
+      document.body.style.filter = "none";
+    }
+  }, [show]);
+
   return (
     <Box
       sx={{
@@ -43,6 +53,8 @@ const AlertCard = ({
         borderRadius: 2,
         boxShadow: 3,
         backgroundColor: "white",
+        // filter: "blur(5px)",
+        zIndex: 1300, // Ensure the alert is above everything else
       }}
     >
       <Box>{getIcon()}</Box>
