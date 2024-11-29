@@ -30,15 +30,19 @@ const AlertCard = ({
   };
 
   return (
-    <Card
+    <Box
       sx={{
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
         maxWidth: 400,
         mx: "auto",
-        mt: 5,
         p: 3,
         textAlign: "center",
         borderRadius: 2,
         boxShadow: 3,
+        backgroundColor: "white",
       }}
     >
       <Box>{getIcon()}</Box>
@@ -58,7 +62,7 @@ const AlertCard = ({
           Confirm
         </Button>
       </CardActions>
-    </Card>
+    </Box>
   );
 };
 
