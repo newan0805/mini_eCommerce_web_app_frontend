@@ -20,9 +20,9 @@ const UserBar = () => {
   };
 
   return (
-    <AppBar position="static" color="primary">
+    <AppBar color="#fff" style={{width: "10%", display: "flex", alignSelf: "right"}}>
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" component="div" sx={{}}>
           ADMIN
         </Typography>
         <div>
@@ -51,8 +51,8 @@ const UserBar = () => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>Settings</MenuItem>
+            {/* <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>Settings</MenuItem> */}
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Menu>
         </div>

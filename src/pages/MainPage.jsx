@@ -15,6 +15,7 @@ import { Star } from "@mui/icons-material";
 import UserBar from "../components/UserBar";
 import { Link } from "react-router-dom";
 import AlertCard from "../components/AlertCard";
+import TopBar from "../components/TopBar";
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -67,58 +68,19 @@ const MainPage = () => {
 
   return (
     <Container>
-      <Container
-        sx={{
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "row",
-          gap: 2,
-          mt: 2,
-        }}
-      >
+
+      <Box>
         <UserBar />
-        <Typography
-          variant="h5"
-          sx={{ fontWeight: "bold" }}
-          align="left"
-          gutterBottom
-        >
-          Products
-        </Typography>
-        <Container>
-          <Box
-            sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}
-          >
-            <Grid container spacing={2} sx={{ marginTop: 2 }}>
-              <Grid item xs={12} sm={9}>
-                <SearchBar
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  onPress={handleSearchSubmit}
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={3}
-                sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}
-              >
-                <Link
-                  to={"/add-product"}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  <Button variant="contained" color="primary">
-                    New Product
-                  </Button>
-                </Link>
-                <Button color="primary">
-                  <Star />
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </Container>
-      </Container>
+      </Box>
+
+      <Typography
+        variant="h5"
+        sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+      >
+        Products
+      </Typography>
+      
+      <TopBar handleSearchChange={handleSearchChange} handleSearchSubmit={handleSearchSubmit} searchQuery={searchQuery} />
 
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>

@@ -12,8 +12,11 @@ import {
   Grid,
 } from "@mui/material";
 import AlertCard from "../components/AlertCard";
+import { useNavigate } from "react-router-dom";
 
 const AddProductPage = () => {
+  const navigate = useNavigate();
+  
   const [productSKU, setProductSKU] = useState("");
   const [productName, setProductName] = useState("");
   const [productQTY, setProductQTY] = useState("");
@@ -67,6 +70,7 @@ const AddProductPage = () => {
         title: "Product Added Successfully!",
         description: "Your product has been added to the inventory.",
       });
+      setTimeout(() => navigate(`/`), 2000);
     } catch (error) {
       console.error("Error adding product", error);
       setAlert({

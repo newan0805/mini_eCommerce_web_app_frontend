@@ -20,8 +20,9 @@ const TableComponent = ({ filteredProducts, onDelete }) => {
   const handleEditClick = (product) => {
     navigate(`/edit-product/${product._id}`);
   };
+
   return (
-    <TableContainer sx={{ bgcolor: "#fff" }}>
+    <TableContainer sx={{ bgcolor: "#fff", mt: 4 }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -57,12 +58,10 @@ const TableComponent = ({ filteredProducts, onDelete }) => {
                   <img
                     src={
                       product.images?.find((img) => img.isThumbnail)?.path
-                        ? `http://localhost:5000${
-                            product.images.find((img) => img.isThumbnail).path
-                          }`
-                        : `http://localhost:5000${
-                            product.images?.[0]?.path || ""
-                          }`
+                        ? `http://localhost:5000${product.images.find((img) => img.isThumbnail).path
+                        }`
+                        : `http://localhost:5000${product.images?.[0]?.path || ""
+                        }`
                     }
                     alt={product.name}
                     style={{
@@ -85,7 +84,7 @@ const TableComponent = ({ filteredProducts, onDelete }) => {
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton color="primary" onClick={() => {}}>
+                  <IconButton color="primary" onClick={() => { }}>
                     <Star />
                   </IconButton>
                 </TableCell>

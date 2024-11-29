@@ -14,8 +14,8 @@ import {
 import AlertCard from "../components/AlertCard";
 import { useParams, useNavigate } from "react-router-dom";
 
-const EditProductPage = ({ productId }) => {
-  //   const { productId } = useParams();
+const EditProductPage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
 
   // State for product details
@@ -33,26 +33,28 @@ const EditProductPage = ({ productId }) => {
   });
   const [loading, setLoading] = useState(false);
 
-  // Fetch product details when editing
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/products/${id}`
+      );
+      console.log(`http://localhost:5000/api/products/${id}`);
+      const product = response.data;
+      console.log('fetch edit page: ', product)
+      setProductSKU(product.sku);
+      setProductName(product.name);
+      setProductQTY(product.quantity);
+      setPrice(product.price);
+      setDescription(product.description);
+      setImages(product.images || []);
+    } catch (error) {
+      console.error("Error fetching product", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/products/${productId}`
-        );
-        const product = response.data;
-        setProductSKU(product.sku);
-        setProductName(product.name);
-        setProductQTY(product.quantity);
-        setPrice(product.price);
-        setDescription(product.description);
-        setImages(product.images || []);
-      } catch (error) {
-        console.error("Error fetching product", error);
-      }
-    };
     fetchProduct();
-  }, [productId]);
+  }, []);
 
   const handleImageChange = (e) => {
     const files = e.target.files;
@@ -61,7 +63,7 @@ const EditProductPage = ({ productId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading state
+    setLoading(true);
 
     const formData = new FormData();
     formData.append("sku", productSKU);
@@ -77,9 +79,10 @@ const EditProductPage = ({ productId }) => {
 
     try {
       const token = localStorage.getItem("authToken");
+      console.log(token);
 
       const response = await axios.put(
-        `http://localhost:5000/api/products/${productId}`, // PUT request to update product
+        `http://localhost:5000/api/products/${id}`,
         formData,
         {
           headers: {
@@ -89,13 +92,14 @@ const EditProductPage = ({ productId }) => {
         }
       );
 
+
       setAlert({
         show: true,
         type: "success",
         title: "Product Updated Successfully!",
         description: "Your product has been updated.",
       });
-      setTimeout(() => navigate("/products"), 2000); // Navigate to products page after 2 seconds
+      setTimeout(() => navigate(`/products/${id}`), 2000);
     } catch (error) {
       console.error("Error updating product", error);
       setAlert({
@@ -106,7 +110,7 @@ const EditProductPage = ({ productId }) => {
           "An error occurred while updating the product. Please try again.",
       });
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
@@ -133,149 +137,133 @@ const EditProductPage = ({ productId }) => {
         maxWidth: 800,
       }}
     >
-      <Box sx={{ mt: 3, backgroundColor: "#fff" }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 3,
-          }}
-        >
-          <Typography
-            variant="h5"
-            sx={{ fontWeight: "bold", textTransform: "uppercase" }}
-          >
-            Products
-          </Typography>
-          <Typography sx={{ color: "#001EB9", fontSize: "20px" }}>
-            {">"} Edit
-          </Typography>
-        </Box>
-
-        <Card sx={{ backgroundColor: "#fff" }}>
-          <img
-            src={
-              images?.find((img) => img.isThumbnail)
-                ? `http://localhost:5000${
-                    images.find((img) => img.isThumbnail).path
-                  }`
-                : images?.[0]?.path
-                ? `http://localhost:5000${images[0].path}`
-                : "default_image_path_here"
-            }
-            alt={productName}
-            style={{
-              width: "30%",
-              height: "auto",
-              objectFit: "cover",
-              maxHeight: 400,
-            }}
-          />
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} gap={2} display={"flex"} alignItems={"center"}>
-                <Typography>SKU</Typography>
-                <TextField
-                  sx={{ width: "40%" }}
-                  margin="normal"
-                  variant="outlined"
-                  value={productSKU}
-                  onChange={(e) => setProductSKU(e.target.value)}
-                  required
-                />
-                <Typography>Name</Typography>
-                <TextField
-                  fullWidth
-                  margin="normal"
-                  variant="outlined"
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                  required
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Typography>Price</Typography>
-                <TextField
-                  type="number"
-                  fullWidth
-                  margin="normal"
-                  variant="outlined"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  required
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Typography>Product QTY</Typography>
-                <TextField
-                  fullWidth
-                  margin="normal"
-                  variant="outlined"
-                  value={productQTY}
-                  onChange={(e) => setProductQTY(e.target.value)}
-                  required
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <Typography>Product Description</Typography>
-                <TextField
-                  fullWidth
-                  margin="normal"
-                  variant="outlined"
-                  multiline
-                  rows={4}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
-              </Grid>
-
-              <Grid item xs={12} display={"flex"}>
-                <Box sx={{ width: "20%" }}>
-                  <Typography>Product Images</Typography>
-                  <Typography color="#969191" pt={1}>
-                    JPEG, PNG, SVG or GIF (Maximum file size 50MB)
-                  </Typography>
-                </Box>
-                <Box>
-                  <FormControl fullWidth margin="normal">
-                    <Input
-                      id="upload-images"
-                      type="file"
-                      style={{ display: "none" }}
-                      inputProps={{ multiple: true }}
-                      onChange={handleImageChange}
-                    />
-                    <label htmlFor="upload-images" className="upload-label">
-                      <Typography> Add Images</Typography>
-                    </label>
-                  </FormControl>
-                </Box>
-              </Grid>
-
-              <Grid item xs={12} sx={{ textAlign: "right" }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                    mt: 3,
-                    backgroundColor: "#001EB9",
-                    p: 1.2,
-                    width: "30%",
-                  }}
-                  disabled={loading}
-                >
-                  {loading ? "Updating..." : "Update Product"}
-                </Button>
-              </Grid>
+      <Box sx={{ backgroundColor: "#fff", width: 600 }}>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} gap={2} display={"flex"} alignItems={"center"}>
+              <Typography>SKU</Typography>
+              <TextField
+                sx={{ width: "40%" }}
+                margin="normal"
+                variant="outlined"
+                value={productSKU}
+                onChange={(e) => setProductSKU(e.target.value)}
+                required
+              />
+              <Typography>Name</Typography>
+              <TextField
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+                required
+              />
             </Grid>
-          </form>
-        </Card>
+
+            <Grid item xs={12} sm={6}>
+              <Typography>Price</Typography>
+              <TextField
+                type="number"
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <Typography>Product QTY</Typography>
+              <TextField
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                value={productQTY}
+                onChange={(e) => setProductQTY(e.target.value)}
+                required
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography>Product Description</Typography>
+              <TextField
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                multiline
+                rows={4}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </Grid>
+
+            <Grid item xs={12} display={"flex"} gap={2}>
+              <Box sx={{ width: "50%" }}>
+                <img
+                  src={
+                    images?.find((img) => img.isThumbnail)
+                      ? `http://localhost:5000${images.find((img) => img.isThumbnail).path
+                      }`
+                      : images?.[0]?.path
+                        ? `http://localhost:5000${images[0].path}`
+                        : "default_image_path_here"
+                  }
+                  alt={productName}
+                  style={{
+                    // height: "40%",
+                    width: "100%",
+                    objectFit: "cover",
+                    maxHeight: 400,
+                  }}
+                />
+              </Box>
+            {/* </Grid>
+
+            <Grid item xs={12} display={"flex"}> */}
+              <Box sx={{ width: "20%" }}>
+                <Typography>Product Images</Typography>
+                <Typography color="#969191" pt={1}>
+                  JPEG, PNG, SVG or GIF (Maximum file size 50MB)
+                </Typography>
+              </Box>
+              
+              <Box>
+                <FormControl fullWidth margin="normal">
+                  <Input
+                    id="upload-images"
+                    type="file"
+                    style={{ display: "none" }}
+                    inputProps={{ multiple: true }}
+                    onChange={handleImageChange}
+                  />
+                  <label htmlFor="upload-images" className="upload-label">
+                    <Typography> Add Images</Typography>
+                  </label>
+                </FormControl>
+              </Box>
+            </Grid>
+            
+            <Grid item xs={12} sx={{ textAlign: "right" }}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{
+                  mt: 3,
+                  backgroundColor: "#001EB9",
+                  p: 1.2,
+                  width: "30%",
+                }}
+                disabled={loading}
+              >
+                {loading ? "Updating..." : "Update Product"}
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
 
         {alert.show && (
           <AlertCard

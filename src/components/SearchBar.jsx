@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, IconButton, Box, InputAdornment, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 const SearchBar = ({ value, onChange, onPress }) => {
@@ -11,30 +11,48 @@ const SearchBar = ({ value, onChange, onPress }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        alignContent: "center",
-        flexDirection: "row",
         gap: 2,
-        width: "100%",
-        // height: 10,
-        maxWidth: 800,
         margin: "auto",
-        // mt: 2,
+        width: 400,
+        maxWidth: 800,
       }}
-    >
+      >
       <TextField
-        label="Search products"
+        // label="Search products"
         value={value}
         onChange={onChange}
+        variant="outlined"
         fullWidth
+        sx={{
+          borderRadius: 50,
+          "& .MuiOutlinedInput-root": {
+            borderRadius: 50,
+            paddingRight: 2,
+          },
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              {/* <Typography>Search</Typography> */}
+              <IconButton
+                type="submit"
+                onClick={onPress}
+                edge="end"
+                sx={{
+                  backgroundColor: "primary.main",
+                  color: "#fff",
+                  borderRadius: "50%",
+                  "&:hover": {
+                    backgroundColor: "primary.dark",
+                  },
+                }}
+              >
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        startIcon={<SearchIcon />}
-      >
-        Search
-      </Button>
     </Box>
   );
 };

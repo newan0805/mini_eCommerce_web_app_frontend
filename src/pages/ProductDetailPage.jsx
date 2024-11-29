@@ -1,5 +1,3 @@
-// src/pages/ProductDetailPage.js
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -8,13 +6,16 @@ import {
   Button,
   Card,
   CardContent,
+  CardMedia,
   Typography,
   CircularProgress,
+  Container,
 } from "@mui/material";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -25,6 +26,8 @@ const ProductDetailPage = () => {
         setProduct(response.data);
       } catch (error) {
         console.error("Error fetching product", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -45,56 +48,71 @@ const ProductDetailPage = () => {
     }
   };
 
-  return (
-    <Box sx={{ padding: 3, backgroundColor: "#fff" }}>
-      {product ? (
-        <Card
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={
-              product.images?.find((img) => img.isThumbnail)?.path
-                ? `http://localhost:5000${
-                    product.images.find((img) => img.isThumbnail).path
-                  }`
-                : `http://localhost:5000${product.images?.[0]?.path || ""}`
-            }
-            alt={product.name}
-            style={{
-              width: "60%",
-              height: "auto",
-              objectFit: "cover",
-              maxHeight: 400,
-            }}
-          />
-          <CardContent>
-            <Typography variant="h4" gutterBottom>
-              {product.name}
-            </Typography>
-            <Typography variant="body1" color="textSecondary" paragraph>
-              {product.description}
-            </Typography>
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
-            <Button
-              variant="contained"
-              color={product.favorite ? "error" : "primary"}
-              onClick={handleFavorite}
-              fullWidth
-            >
-              {product.favorite ? "Remove from Favorites" : "Add to Favorites"}
-            </Button>
-          </CardContent>
-        </Card>
-      ) : (
-        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
-          <CircularProgress />
-        </Box>
-      )}
-    </Box>
+  if (!product) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <Typography variant="h6" color="error">
+          Product not found.
+        </Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Container sx={{ mt: 4, mb: 4 }}>
+      <Card
+        sx={{
+          maxWidth: 400,
+          margin: "0 auto",
+          boxShadow: 3,
+          borderRadius: 2,
+        }}
+      >
+        <CardMedia
+          component="img"
+          image={
+            product.images?.find((img) => img.isThumbnail)?.path
+              ? `http://localhost:5000${product.images.find((img) => img.isThumbnail).path}`
+              : `http://localhost:5000${product.images?.[0]?.path || ""}`
+          }
+          alt={product.name}
+          sx={{
+            height: 300,
+            objectFit: "cover",
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+          }}
+        />
+        <CardContent>
+          <Typography variant="h4" gutterBottom>
+            {product.name}
+          </Typography>
+          <Typography variant="body1" color="textSecondary" paragraph>
+            {product.description}
+          </Typography>
+          <Typography variant="h6" color="primary" gutterBottom>
+            Price: ${product.price}
+          </Typography>
+          <Button
+            variant="contained"
+            color={product.favorite ? "error" : "primary"}
+            onClick={handleFavorite}
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            {product.favorite ? "Remove from Favorites" : "Add to Favorites"}
+          </Button>
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 
