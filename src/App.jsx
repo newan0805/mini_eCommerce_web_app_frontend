@@ -15,10 +15,14 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/search/:query" element={<SearchResultsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/products/:id" element={
+          <ProtectedRoute>
+            <ProductDetailPage />
+          </ProtectedRoute>
+        } />
         <Route
           path="/add-product"
           element={
