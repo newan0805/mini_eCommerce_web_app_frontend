@@ -39,16 +39,21 @@ const TopBar = ({ handleSearchChange, handleSearchSubmit, searchQuery }) => {
                         New Product
                     </Button>
                 </Link>
-                <Button
-                    color="primary"
-                    sx={{
-                        minWidth: "40px",
-                        height: "40px",
-                        borderRadius: "50%",
-                    }}
+                <Link
+                    to="/favorites"
+                    style={{ textDecoration: "none", color: "inherit" }}
                 >
-                    <Star />
-                </Button>
+                    <Button
+                        color="primary"
+                        sx={{
+                            minWidth: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                        }}
+                    >
+                        <Star />
+                    </Button>
+                </Link>
             </Box>
         </Container>
     );

@@ -11,11 +11,19 @@ import {
   CircularProgress,
   Container,
 } from "@mui/material";
+import AlertCard from "../components/AlertCard"; // Import the AlertCard component
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [alert, setAlert] = useState({
+    show: false,
+    type: "info",
+    title: "",
+    description: "",
+    onConfirm: null,
+  });
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -25,7 +33,7 @@ const ProductDetailPage = () => {
         );
         setProduct(response.data);
       } catch (error) {
-        // console.error("Error fetching product", error);
+        console.error("Error fetching product", error);
       } finally {
         setLoading(false);
       }
@@ -34,17 +42,48 @@ const ProductDetailPage = () => {
     fetchProduct();
   }, [id]);
 
-  const handleFavorite = async () => {
+  const handleFavorite = async (productId) => {
     try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("No authentication token found. Please log in.");
+      }
+
       const response = await axios.post(
-        `http://localhost:5000/products/favorite/${id}`
+        `http://localhost:5000/api/favorites/${productId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+
       setProduct((prev) => ({
         ...prev,
-        favorite: response.data.favorite,
+        favorite: !prev.favorite,
       }));
+
+      setAlert({
+        show: true,
+        type: "info",
+        title: product.favorite ? "Removed from Favorites" : "Added to Favorites",
+        description: product.favorite
+          ? "The product has been removed from your favorites."
+          : "The product has been added to your favorites.",
+        onConfirm: () => setAlert({ ...alert, show: false }),
+      });
+      setTimeout(() => (window.location.href = "/"), 2000);
     } catch (error) {
-      // console.error("Error adding to favorites", error);
+      console.error("Error adding to favorites", error);
+
+      setAlert({
+        show: true,
+        type: "error",
+        title: "Error",
+        description: "Failed to update favorites. Please try again.",
+        onConfirm: () => setAlert({ ...alert, show: false }), // Close the alert on confirm
+      });
     }
   };
 
@@ -104,7 +143,7 @@ const ProductDetailPage = () => {
           <Button
             variant="contained"
             color={product.favorite ? "error" : "primary"}
-            onClick={handleFavorite}
+            onClick={() => handleFavorite(product._id)}
             fullWidth
             sx={{ mt: 2 }}
           >
@@ -112,6 +151,15 @@ const ProductDetailPage = () => {
           </Button>
         </CardContent>
       </Card>
+
+      {alert.show && (
+        <AlertCard
+          type={alert.type}
+          title={alert.title}
+          description={alert.description}
+          onConfirm={alert.onConfirm}
+        />
+      )}
     </Container>
   );
 };
