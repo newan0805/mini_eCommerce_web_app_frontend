@@ -82,7 +82,7 @@ const ProductDetailPage = () => {
         type: "error",
         title: "Error",
         description: "Failed to update favorites. Please try again.",
-        onConfirm: () => setAlert({ ...alert, show: false }), // Close the alert on confirm
+        onConfirm: () => setAlert({ ...alert, show: false }), 
       });
     }
   };

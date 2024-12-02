@@ -13,7 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Star } from "@mui/icons-material";
 
-const TableComponent = ({ filteredProducts, onDelete }) => {
+const TableComponent = ({ filteredProducts, onDelete, handleFavorite }) => {
   const navigate = useNavigate();
 
   const handleEditClick = (product) => {
@@ -57,10 +57,12 @@ const TableComponent = ({ filteredProducts, onDelete }) => {
                   <img
                     src={
                       product.images?.find((img) => img.isThumbnail)?.path
-                        ? `http://localhost:5000${product.images.find((img) => img.isThumbnail).path
-                        }`
-                        : `http://localhost:5000${product.images?.[0]?.path || ""
-                        }`
+                        ? `http://localhost:5000${
+                            product.images.find((img) => img.isThumbnail).path
+                          }`
+                        : `http://localhost:5000${
+                            product.images?.[0]?.path || ""
+                          }`
                     }
                     alt={product.name}
                     style={{
@@ -83,7 +85,12 @@ const TableComponent = ({ filteredProducts, onDelete }) => {
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton color="primary" onClick={() => { }}>
+                  <IconButton
+                    color="primary"
+                    onClick={() => {
+                      handleFavorite(product._id);
+                    }}
+                  >
                     <Star />
                   </IconButton>
                 </TableCell>
