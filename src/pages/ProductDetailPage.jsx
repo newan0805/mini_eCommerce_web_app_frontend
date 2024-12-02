@@ -11,8 +11,7 @@ import {
   CircularProgress,
   Container,
 } from "@mui/material";
-import AlertCard from "../components/AlertCard"; // Import the AlertCard component
-
+import AlertCard from "../components/AlertCard"; 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
